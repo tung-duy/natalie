@@ -5,13 +5,13 @@ services:
     image: mysql:8.0
     command: '--default-authentication-plugin=mysql_native_password'
     volumes:
-      - db_data_volume:/var/lib/mysql
+      - ./db_data:/var/lib/mysql
     restart: always
     env_file: .env
     environment:
       - MYSQL_DATABASE=$MYSQL_DATABASE
     networks:
-      - dockerwp
+      - natalie-network
   # phpmyadmin
   phpmyadmin:
     depends_on:
@@ -20,18 +20,18 @@ services:
     restart: always
     env_file: .env
     ports:
-      - "8080:80"
+      - "8880:80"
     environment:
       PMA_HOST: db
     networks:
-      - dockerwp
+      - natalie-network
   # Wordpress
   wordpress:
     depends_on:
       - db
     image: wordpress:latest
     volumes:
-      - wordpress_data_volume:/var/www/html
+      # - wordpress_data_volume:/var/www/html
       - ./wordpress_data:/var/www/html
     ports:
       - "8000:80"
@@ -42,9 +42,8 @@ services:
       WORDPRESS_DB_PASSWORD: $MYSQL_PASSWORD
       WORDPRESS_DB_NAME: $MYSQL_DATABASE
     networks:
-      - dockerwp
+      - natalie-network
 networks:
-  dockerwp:
-volumes:
-  db_data_volume: {}
-  wordpress_data_volume: {}
+  natalie-network:
+# volumes:
+#   wordpress_data_volume: {}

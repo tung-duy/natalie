@@ -2,3 +2,5 @@
 .git
 docker-compose.yml
 .dockerignore
+wordpress_data
+db_data
